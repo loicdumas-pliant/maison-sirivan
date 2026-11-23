@@ -235,22 +235,42 @@ figcaption { margin-block-start: 0.6rem; font-size: var(--step--1); color: var(-
   .cover img { max-height: 10cm; }
 }
 
-/* 12. Lieux de vente : [[place id]] — infos, deux boutons, carte Google Maps intégrée (chargée en différé) */
+/* 7b. Galerie : plusieurs lignes d'images qui se suivent dans le Markdown — 2 colonnes, recadrage 4:5 */
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-s); margin-block: var(--space-m); }
+.gallery .figure { margin: 0; }
+.gallery .figure img { aspect-ratio: 4 / 5; object-fit: cover; block-size: auto; }
+.gallery figcaption { margin-block-start: 0.4rem; }
+
+/* 12. Lieux de vente : [[place id]] — infos, plan symbolique cliquable (ouvre Google Maps), bouton itinéraire.
+   Le plan est un SVG dans la page : aucune requête vers Google tant que le visiteur ne clique pas. */
 .place { margin-block: var(--space-m); border-block-start: 1px solid var(--color-line); padding-block-start: var(--space-s); }
 .place .contact-card { margin-block: 0; border: 0; }
 .place-name { font-weight: 700; margin: 0; }
 .place-address { margin-block: 0.3rem 0; }
 .place-note { color: var(--color-muted); }
+.place-map { position: relative; display: block; margin-block-start: var(--space-s); color: var(--color-ink); text-decoration: none; }
+.map-symbol { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 5 / 3; }
+.m-ground { fill: var(--color-line-soft); }
+.m-block { fill: var(--color-paper); opacity: 0.55; }
+.m-road path { fill: none; stroke: var(--color-paper); stroke-width: 14; }
+.m-river { fill: none; stroke: var(--color-jade, var(--color-accent)); stroke-width: 9; stroke-linecap: round; opacity: 0.35; }
+.m-route { fill: none; stroke: var(--color-accent); stroke-width: 3.5; stroke-dasharray: 2 9; stroke-linecap: round; }
+.m-pin path { fill: var(--color-accent); }
+.m-pin-dot { fill: var(--color-paper); }
+.place-map-cta {
+  position: absolute; inset-inline-end: 0.75rem; inset-block-end: 0.75rem;
+  display: inline-flex; align-items: center; min-block-size: 44px; padding: 0.6rem 1.1rem;
+  background: var(--color-ink); color: var(--color-paper); font-weight: 600;
+}
+.place-map-cta span { margin-inline-start: 0.35em; }
+.place-map:hover .place-map-cta { background: var(--color-accent); color: #fff; }
+.place-map:hover .m-route { stroke-dasharray: none; }
 .place-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-block: var(--space-s); }
 .place-actions .button {
   display: inline-flex; align-items: center; min-block-size: 44px; padding: 0.6rem 1.1rem;
   background: var(--color-ink); color: var(--color-paper); font-weight: 600; text-decoration: none;
 }
 .place-actions .button span { margin-inline-start: 0.35em; }
-.place-actions .button:hover { background: var(--color-accent); color: #fff; }
 .place-actions .button-quiet { background: transparent; color: var(--color-ink); box-shadow: inset 0 0 0 2px var(--color-ink); }
 .place-actions .button-quiet:hover { background: var(--color-ink); color: var(--color-paper); }
-.place-map { aspect-ratio: 4 / 3; background: var(--color-line-soft); }
-@media (min-width: 40rem) { .place-map { aspect-ratio: 16 / 10; } }
-.place-map iframe { display: block; inline-size: 100%; block-size: 100%; border: 0; }
 @media print { .place-map { display: none; } }

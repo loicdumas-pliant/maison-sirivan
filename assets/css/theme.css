@@ -112,6 +112,8 @@ a { color: var(--color-accent); }
 /* photos dans le texte : une sur deux en manche, l'autre en poche */
 .figure img { clip-path: var(--cut-sleeve); }
 .section:nth-of-type(even) .figure img { clip-path: var(--cut-pocket); }
+/* galerie : photos nettes, sans découpe (la découpe reste pour les photos seules) */
+.gallery .figure img, .section:nth-of-type(even) .gallery .figure img { clip-path: none; }
 @media print { .cover img, .figure img { clip-path: none; } .cover::before { display: none; } }
 @media (min-width: 60rem) {
   .page:has(> .cover-portrait) { max-width: none; padding-inline-end: 0; column-gap: var(--space-xl); }
