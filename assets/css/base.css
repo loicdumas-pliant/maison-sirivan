@@ -1,0 +1,236 @@
+/* ==========================================================================
+   base.css — feuille commune aux sites Sirivan
+   Structure, typographie et accessibilité. Les couleurs, polices et quelques
+   détails propres à chaque marque sont dans theme.css (variables ci-dessous).
+   ========================================================================== */
+
+/* 1. Variables (valeurs par défaut, redéfinies par chaque thème) ----------- */
+:root {
+  --font-text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-text);
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+
+  --color-ink: #111;
+  --color-paper: #fff;
+  --color-muted: #666;          /* contraste ≥ 4.5:1 sur blanc */
+  --color-line: #111;
+  --color-line-soft: #e3e3e3;
+  --color-accent: #111;
+  --color-focus: #2b45d8;
+  --color-todo: #fff3b0;
+
+  /* échelle typographique fluide (min à 360 px, max à 1280 px) */
+  --step--1: clamp(0.83rem, 0.81rem + 0.1vw, 0.9rem);
+  --step-0:  clamp(1rem, 0.96rem + 0.18vw, 1.1rem);
+  --step-1:  clamp(1.2rem, 1.12rem + 0.4vw, 1.45rem);
+  --step-2:  clamp(1.5rem, 1.3rem + 0.9vw, 2.1rem);
+  --step-3:  clamp(1.9rem, 1.5rem + 1.8vw, 3.1rem);
+  --step-4:  clamp(2.5rem, 1.7rem + 3.6vw, 5rem);
+
+  /* espacements */
+  --space-xs: 0.5rem;
+  --space-s:  1rem;
+  --space-m:  clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  --space-l:  clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+  --space-xl: clamp(3.5rem, 2.2rem + 6vw, 8rem);
+
+  --measure: 66ch;              /* longueur de ligne confortable */
+  --page-max: 78rem;
+  --gutter: clamp(1.25rem, 0.6rem + 3vw, 3rem);
+  --leading: 1.65;
+  --tracking-caps: 0.14em;
+}
+
+/* 2. Remise à zéro moderne ------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { min-height: 100vh; line-height: var(--leading); -webkit-font-smoothing: antialiased; }
+img, picture, svg, video { display: block; max-width: 100%; height: auto; }
+input, button, textarea, select { font: inherit; }
+p, li, h1, h2, h3, figcaption, blockquote { overflow-wrap: break-word; }
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* 3. Typographie ----------------------------------------------------------- */
+body {
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  color: var(--color-ink);
+  background: var(--color-paper);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; }
+h1 { font-size: var(--step-4); letter-spacing: -0.02em; }
+h2 { font-size: var(--step-3); letter-spacing: -0.01em; }
+h3 { font-size: var(--step-1); margin-block: var(--space-m) var(--space-xs); }
+p + p, p + ul, p + ol, ul + p, ol + p { margin-block-start: 1em; }
+ul, ol { padding-inline-start: 1.25em; }
+li + li { margin-block-start: 0.35em; }
+strong { font-weight: 600; }
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+blockquote {
+  margin-block: var(--space-m);
+  padding-inline-start: var(--space-m);
+  border-inline-start: 2px solid var(--color-accent);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.25;
+}
+
+mark.todo { background: var(--color-todo); color: #111; padding-inline: 0.2em; }
+
+/* 4. Accessibilité --------------------------------------------------------- */
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }   /* WCAG 2.4.7 */
+main:focus { outline: none; }
+/* WCAG 2.4.11 : un élément qui reçoit le focus n'est jamais caché sous un titre collant */
+:target, :focus { scroll-margin-block: var(--space-l); }
+/* WCAG 2.5.8 : cibles de navigation d'au moins 24 × 24 px CSS (les liens dans le texte en sont exemptés) */
+.site-nav a, .lang a, .footer-links a, .breadcrumb a, .skip-link { display: inline-block; min-block-size: 24px; min-inline-size: 24px; padding-block: 0.3rem; }
+.skip-link {
+  position: absolute; inset-inline-start: var(--space-s); inset-block-start: -10rem;
+  z-index: 10; padding: 0.6rem 1rem; background: var(--color-ink); color: var(--color-paper);
+}
+.skip-link:focus { inset-block-start: var(--space-s); }
+
+/* 5. Mise en page générale ------------------------------------------------- */
+.wrap { max-width: var(--page-max); margin-inline: auto; padding-inline: var(--gutter); }
+
+.site-header { border-block-end: 1px solid var(--color-line); }
+.site-header-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-s) var(--space-m); padding-block: var(--space-s);
+}
+.brand { display: flex; flex-direction: column; text-decoration: none; }
+.brand-name { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.1; }
+.brand-local { font-size: var(--step--1); }
+.brand-tagline { font-size: var(--step--1); color: var(--color-muted); }
+
+.site-nav ul, .lang ul, .footer-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; list-style: none; padding: 0; }
+.site-nav li + li, .lang li + li, .footer-links li + li { margin: 0; }
+.site-nav a { text-decoration: none; padding-block: 0.25rem; border-block-end: 1px solid transparent; }
+.site-nav a:hover, .site-nav a[aria-current="page"] { border-block-end-color: currentColor; }
+.lang a { font-size: var(--step--1); }
+
+/* 5b. Smartphone (< 40rem) : marque + langue sur la 1re ligne, menu sur la 2e */
+@media (max-width: 39.99rem) {
+  .site-header-inner { gap: 0.5rem var(--space-s); padding-block: 0.75rem; }
+  .brand { order: 1; flex: 1 1 0; min-inline-size: 0; }
+  .lang { order: 2; }
+  .site-nav { order: 3; flex-basis: 100%; }
+  .site-nav ul { gap: 0 clamp(0.9rem, 4vw, 1.25rem); }
+  .brand-tagline { display: none; }      /* la même phrase figure dans l'intro et le pied de page */
+  .page-header { padding-block: var(--space-l) var(--space-m); }
+}
+
+/* 6. Page ------------------------------------------------------------------ */
+.page-header { padding-block: var(--space-xl) var(--space-l); }
+.page-header h1 { max-width: 18ch; }
+.page-meta { margin-block-end: var(--space-m); font-size: var(--step--1); color: var(--color-muted); }
+.lead { max-width: 40rem; margin-block-start: var(--space-m); font-size: var(--step-1); line-height: 1.5; }
+
+.cover { margin-block-end: var(--space-l); }
+.cover img { width: 100%; max-height: 80vh; object-fit: cover; }
+/* couverture verticale (photo plus haute que large) : jamais recadrée en bandeau.
+   Sur grand écran, le titre et la photo sont côte à côte ; sur téléphone, la photo suit le titre. */
+.cover-portrait img { max-height: none; }
+.cover-portrait { padding-inline: var(--gutter); }
+@media (min-width: 60rem) {
+  .page:has(> .cover-portrait) {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); column-gap: var(--space-l);
+    max-width: var(--page-max); margin-inline: auto; padding-inline: var(--gutter); align-items: center;
+  }
+  .page:has(> .cover-portrait) > .page-header { grid-column: 1; grid-row: 1; padding-inline: 0; margin: 0; }
+  .page:has(> .cover-portrait) > .cover-portrait { grid-column: 2; grid-row: 1; padding-inline: 0; margin-block: var(--space-m); }
+  .page:has(> .cover-portrait) > .cover-portrait img { max-height: 88vh; object-fit: cover; object-position: 50% 30%; }
+  .page:has(> .cover-portrait) > .page-body { grid-column: 1 / -1; padding-inline: 0; }
+}
+
+.page-body { padding-block-end: var(--space-xl); counter-reset: section; }
+.intro, .section-body { max-width: var(--measure); }
+.intro { margin-block-end: var(--space-l); }
+
+/* sections numérotées 01, 02… : le titre à gauche, le texte à droite */
+.section {
+  display: grid; gap: var(--space-s) var(--space-l);
+  padding-block: var(--space-l);
+  border-block-start: 1px solid var(--color-line-soft);
+  counter-increment: section;
+}
+.section h2::before {
+  content: counter(section, decimal-leading-zero);
+  display: block; margin-block-end: 0.6rem;
+  font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.05em; color: var(--color-muted);
+}
+@media (min-width: 60rem) {
+  .section { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .section h2 { position: sticky; inset-block-start: var(--space-m); align-self: start; font-size: var(--step-2); }
+}
+
+/* listes numérotées : lignes séparées, numéro en marge */
+.section-body ol, .intro ol { list-style: none; padding: 0; counter-reset: item; border-block-start: 1px solid var(--color-line); }
+.section-body ol > li, .intro ol > li {
+  counter-increment: item; position: relative;
+  margin: 0; padding-block: 0.9rem; padding-inline-start: 3rem; border-block-end: 1px solid var(--color-line-soft);
+}
+.section-body ol > li::before, .intro ol > li::before {
+  content: counter(item, decimal-leading-zero);
+  position: absolute; inset-inline-start: 0; inset-block-start: 1.05rem;
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--color-muted);
+}
+
+/* fil d'Ariane (articles) */
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; list-style: none; padding: 0; margin-block-end: var(--space-s); font-size: var(--step--1); color: var(--color-muted); }
+.breadcrumb li { margin: 0; }
+.breadcrumb li + li::before { content: "/"; margin-inline-end: 0.5rem; }
+
+/* fiche pratique [[contact]] */
+.contact-card { margin-block: var(--space-m); border-block-start: 1px solid var(--color-line); }
+.contact-name { font-family: var(--font-display); font-size: var(--step-1); padding-block: var(--space-s) 0.5rem; }
+.contact-card dl div { display: grid; grid-template-columns: minmax(8rem, 1fr) 2fr; gap: var(--space-s); padding-block: 0.7rem; border-block-end: 1px solid var(--color-line-soft); }
+.contact-card dt { color: var(--color-muted); }
+.contact-card dd { margin: 0; }
+
+/* 7. Images ---------------------------------------------------------------- */
+.figure { margin-block: var(--space-m); }
+.figure img { width: 100%; }
+figcaption { margin-block-start: 0.6rem; font-size: var(--step--1); color: var(--color-muted); }
+
+/* 8. Journal --------------------------------------------------------------- */
+.posts { list-style: none; padding: 0; border-block-start: 1px solid var(--color-line); max-width: 52rem; }
+.post { margin: 0; padding-block: var(--space-m); border-block-end: 1px solid var(--color-line-soft); }
+.post h2 { font-size: var(--step-2); }
+.post h2 a { text-decoration: none; }
+.post h2 a:hover { text-decoration: underline; }
+.post-date { margin-block: 0.4rem 0.8rem; font-size: var(--step--1); color: var(--color-muted); }
+
+/* 9. Pied de page ---------------------------------------------------------- */
+.site-footer { border-block-start: 1px solid var(--color-line); font-size: var(--step--1); color: var(--color-muted); }
+.site-footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-m); padding-block: var(--space-l); }
+.footer-links a { color: var(--color-ink); }
+.copyright { margin-block-start: var(--space-s); }
+
+/* 10. Khmer (W3C, Khmer Layout Requirements) ---------------------------------
+   - pas d'espaces entre les mots : la coupure de ligne se fait par dictionnaire
+     (ou sur des espaces de largeur nulle U+200B placées dans le texte) ;
+   - les consonnes s'empilent (coeng) : interligne plus haut, pas d'espacement de lettres,
+     pas de majuscules ni d'italique simulé, pas de justification. */
+:lang(km) { --leading: 1.9; --tracking-caps: 0; font-synthesis: none; text-align: start; }
+:lang(km) h1, :lang(km) h2, :lang(km) h3 { letter-spacing: 0; line-height: 1.5; }
+:lang(km) em, :lang(km) i, :lang(km) blockquote, :lang(km) .post h2 { font-style: normal; }
+:lang(km) em { font-weight: 600; }
+:lang(km) * { text-transform: none; }
+
+/* 11. Impression ----------------------------------------------------------- */
+@media print {
+  .site-nav, .lang, .skip-link, .footer-links { display: none; }
+  body { font-size: 11pt; color: #000; }
+  .page-header, .section { padding-block: 1rem; }
+  .section { display: block; break-inside: avoid; }
+  .section h2 { position: static; }
+  .page-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .cover img { max-height: 10cm; }
+}

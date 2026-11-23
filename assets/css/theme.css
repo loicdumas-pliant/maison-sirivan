@@ -1,0 +1,129 @@
+/* theme.css — Maison Sirivan, brief « Interface Design 2026 »
+   Fond blanc + anthracite + 3 couleurs contrastées (rouge soie, jade, safran) ; losange Leboeuk en filigrane (pied de page) ;
+   typographie sans empattement humaniste (Fira Sans), inspirée de la signalétique d'Integral Designers.
+   Référence LOROD (Pentagram) : des formes découpées comme des pièces de patron (corsage, manche, poche, crans)
+   servent de cadre aux photos et de repères entre les rubriques. Uniquement du CSS : rien à télécharger en plus.
+   Volontairement : pas de grand titre à empattements, pas de corail/argile — pour s'éloigner du style « Anthropic ». */
+@font-face { font-family: "Fira Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/fira-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Fira Sans"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/fira-sans-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Fira Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/fira-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Fira Sans"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/fira-sans-latin-700-normal.woff2") format("woff2"); }
+
+:root {
+  --font-text: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fira Sans", system-ui, sans-serif;
+  --font-mono: "Fira Sans", system-ui, sans-serif;
+  --color-ink: #2E2E2C;         /* anthracite */
+  --color-paper: #FFFFFF;       /* blanc — anthracite 13,6:1 · gris 6,9:1 · rouge 7,8:1 · jade 6,3:1 */
+  --color-muted: #5E5A52;       
+  --color-line: #2E2E2C;
+  --color-line-soft: #E2E2E0;
+  --color-accent: #A4161A;      /* rouge soie : liens, boutons */
+  --color-jade: #1E6B5C;        
+  --color-saffron: #D9A21B;     /* safran : décor, ou texte sur anthracite seulement (5,9:1) */
+  --color-focus: #A4161A;
+  --tracking-caps: 0.06em;
+  /* pièces de patron (coordonnées en %, donc valables à toutes les tailles d'écran) */
+  /* couverture : pièce abstraite — un seul arrondi d'emmanchure, deux crans, bords légèrement de biais */
+  --cut-cover: polygon(0% 22%, 5.5% 21%, 10% 18.5%, 13.5% 14.5%, 16% 9.5%, 17.5% 4.5%, 18% 0%, 100% 3%,
+                       100% 60%, 98.3% 62%, 100% 64%, 100% 100%, 42% 97.7%, 40.5% 95.4%, 39% 97.6%, 0% 96%);
+  --cut-cover-back: polygon(6% 5%, 100% 0%, 95% 100%, 0% 93%);
+  --cut-sleeve: polygon(0% 14%, 7% 8.5%, 16% 4.2%, 27% 1.4%, 39% 0.2%, 48.5% 0%, 50% 2.2%, 51.5% 0%, 61% 0.2%,
+                        73% 1.4%, 84% 4.2%, 93% 8.5%, 100% 14%, 97% 100%, 3% 100%);
+  --cut-pocket: polygon(0% 0%, 100% 0%, 100% 88%, 50% 100%, 0% 88%);
+}
+body { font-size: 1.125rem; }
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.015em; }
+h1 { font-size: clamp(2.6rem, 1.4rem + 5.2vw, 6.2rem); line-height: 0.98; letter-spacing: -0.03em; }
+.lead { font-size: var(--step-1); color: var(--color-ink); max-width: 38rem; }
+
+/* en-tête : logo manuscrit, menu en minuscules (signalétique), page courante soulignée en rouge */
+.site-header { border-block-end: 0; background: var(--color-paper); }
+/* lisière de tissu : filet anthracite, fil de couleur rouge, rangée de trous de rame (comme le bord d'un rouleau) */
+.site-header::after {
+  content: ""; display: block; block-size: 14px;
+  background:
+    linear-gradient(var(--color-ink), var(--color-ink)) 0 0 / 100% 2px no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) 0 5px / 100% 1.5px no-repeat,
+    radial-gradient(circle, #c9c9c6 1.3px, transparent 1.6px) 0 8px / 10px 6px repeat-x;
+}
+.brand { align-items: flex-start; }
+.brand-logo { display: block; block-size: 5rem; inline-size: auto; margin-block-end: 0.35rem; }
+@media (max-width: 39.99rem) { .brand-logo { block-size: 3.5rem; } }
+.brand-tagline { font-size: 0.8rem; font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-ink); }
+/* menu : chaque rubrique dans une poche de couleur, comme les numéros de chapitre (rouge, jade, safran)
+   la forme est sur ::before pour que le contour de focus clavier ne soit pas rogné ; page courante = texte souligné */
+.site-nav ul { gap: 0.5rem 0.5rem; }
+.site-nav a {
+  position: relative; isolation: isolate; display: inline-block; min-block-size: 44px;
+  padding: 0.55rem 0.85rem 0.95rem; text-transform: lowercase; font-weight: 600; line-height: 1.2;
+  text-decoration: none; border: 0; color: #fff;                                   /* blanc sur rouge 7,8:1 */
+}
+.site-nav a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--color-accent); clip-path: var(--cut-pocket); }
+.site-nav li:nth-child(3n+2) a::before { background: var(--color-jade); }          /* blanc sur jade 6,3:1 */
+.site-nav li:nth-child(3n) a { color: var(--color-ink); }                          /* anthracite sur safran 5,9:1 */
+.site-nav li:nth-child(3n) a::before { background: var(--color-saffron); }
+.site-nav a:hover, .site-nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
+.site-nav a:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 3px; }
+@media (max-width: 24rem) { .site-nav a { padding-inline: 0.6rem; } }
+
+.page-header { padding-block: var(--space-xl) var(--space-l); }
+.page-meta { text-transform: uppercase; letter-spacing: var(--tracking-caps); font-weight: 600; color: var(--color-jade); }
+.breadcrumb a { color: var(--color-muted); }
+
+/* sections : numéro 01… en rouge, filet anthracite plein */
+.section { border-block-start: 2px solid var(--color-ink); }
+.section h2 { font-size: var(--step-3); }
+.section h2::before {
+  display: grid; place-items: center; inline-size: 3rem; block-size: 3.4rem; padding-block-end: 0.35rem; margin-block-end: 0.9rem;
+  font-family: var(--font-text); font-size: 1.05rem; font-weight: 700; letter-spacing: 0;
+  clip-path: var(--cut-pocket); background: var(--color-accent); color: #fff;             /* blanc sur rouge 7,8:1 */
+}
+.section:nth-of-type(3n+2) h2::before { background: var(--color-jade); }                 /* blanc sur jade 6,3:1 */
+.section:nth-of-type(3n) h2::before { background: var(--color-saffron); color: var(--color-ink); } /* anthracite sur safran 5,9:1 */
+.section-body ol, .intro ol { border-block-start-color: var(--color-line-soft); }
+.section-body ol > li, .intro ol > li { padding-inline-start: 3.5rem; padding-block: 1.1rem; border-block-end-color: var(--color-line-soft); }
+.section-body ol > li::before, .intro ol > li::before { font-family: var(--font-text); font-weight: 700; font-size: var(--step-2); color: var(--color-accent); inset-block-start: 1rem; line-height: 1; }
+.section-body ol > li strong, .intro ol > li strong { font-weight: 700; }
+.section-body ul > li::marker { color: var(--color-accent); content: "◆  "; font-size: 0.8em; }
+blockquote { font-style: normal; font-weight: 600; font-size: var(--step-2); line-height: 1.25; border-inline-start: 6px solid var(--color-saffron); padding-inline-start: var(--space-s); }
+
+/* liens : rouge soie, soulignés (identifiables sans la couleur) */
+a { color: var(--color-accent); }
+.section-body p.cta > a {
+  display: inline-block; min-block-size: 44px; padding: 0.65rem 1.3rem; background: var(--color-ink); color: var(--color-paper);
+  text-decoration: none; font-weight: 600;
+}
+.section-body p.cta > a:hover { background: var(--color-accent); }
+
+/* couverture : la photo est découpée en pièce de patron abstraite (un arrondi, deux crans),
+   posée sur une seconde pièce safran de forme différente, décalée — sur grand écran, elle touche le bord droit */
+.cover { position: relative; isolation: isolate; }
+.cover img { max-height: 92vh; clip-path: var(--cut-cover); }
+.cover::before {
+  content: ""; position: absolute; z-index: -1; inset: 0 var(--gutter); translate: -0.9rem 0.9rem;
+  background: var(--color-saffron); clip-path: var(--cut-cover-back);
+}
+@media (min-width: 60rem) {
+  .page:has(> .cover-portrait) > .cover-portrait { margin-block-end: 2.6rem; }
+  .page:has(> .cover-portrait) > .cover-portrait::before { inset: 0; translate: -1.6rem 1.6rem; }
+}
+.cover:not(.cover-portrait)::before { inset: 0; }
+/* photos dans le texte : une sur deux en manche, l'autre en poche */
+.figure img { clip-path: var(--cut-sleeve); }
+.section:nth-of-type(even) .figure img { clip-path: var(--cut-pocket); }
+@media print { .cover img, .figure img { clip-path: none; } .cover::before { display: none; } }
+@media (min-width: 60rem) {
+  .page:has(> .cover-portrait) { max-width: none; padding-inline-end: 0; column-gap: var(--space-xl); }
+  .page:has(> .cover-portrait) > .page-header { padding-inline-start: max(0px, calc((100vw - var(--page-max)) / 2)); }
+  .page:has(> .cover-portrait) > .cover-portrait { margin: 0; }
+  .page:has(> .cover-portrait) > .cover-portrait img { block-size: calc(100vh - 7rem); max-height: none; inline-size: 100%; object-fit: cover; object-position: 30% 40%; }
+  .page:has(> .cover-portrait) > .page-body { padding-inline-end: var(--gutter); margin-inline: auto; max-width: var(--page-max); }
+}
+figcaption { color: var(--color-muted); }
+
+/* pied de page : anthracite, losanges Leboeuk en filigrane */
+.site-footer { background: var(--color-ink) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><g fill='none' stroke='%23EFE9DD' stroke-opacity='0.10' stroke-width='1.5'><path d='M20 2 L38 20 L20 38 L2 20Z'/><path d='M20 10 L30 20 L20 30 L10 20Z'/></g><path d='M20 17 L23 20 L20 23 L17 20Z' fill='%23D9A21B' fill-opacity='0.35'/></svg>") 0 0 / 40px 40px repeat; color: #D8D0C1; border: 0; }
+.site-footer a, .footer-links a { color: #fff; }
+.site-footer :focus-visible { outline-color: var(--color-saffron); }
+.post h2 { font-style: normal; }
