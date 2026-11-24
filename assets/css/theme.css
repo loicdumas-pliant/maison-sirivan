@@ -119,12 +119,27 @@ a { color: var(--color-accent); }
 /* galerie : photos nettes, sans découpe (la découpe reste pour les photos seules) */
 .gallery .figure img, .section:nth-of-type(even) .gallery .figure img { clip-path: none; }
 @media print { .cover img, .figure img { clip-path: none; } .cover::before { display: none; } }
+/* couverture verticale sur grand écran : la photo entière (rien n'est recadré, le logo peint reste visible)
+   est centrée dans la page ; le titre et le chapô viennent en superposition sur son bord droit, en bas,
+   sur le mur nu, dans un cartouche blanc (contraste du texte inchangé) */
 @media (min-width: 60rem) {
-  .page:has(> .cover-portrait) { max-width: none; padding-inline-end: 0; column-gap: var(--space-xl); }
-  .page:has(> .cover-portrait) > .page-header { padding-inline-start: max(0px, calc((100vw - var(--page-max)) / 2)); }
-  .page:has(> .cover-portrait) > .cover-portrait { margin: 0; }
-  .page:has(> .cover-portrait) > .cover-portrait img { block-size: calc(100vh - 7rem); max-height: none; inline-size: 100%; object-fit: cover; object-position: 30% 40%; }
-  .page:has(> .cover-portrait) > .page-body { padding-inline-end: var(--gutter); margin-inline: auto; max-width: var(--page-max); }
+  .page:has(> .cover-portrait) {
+    --cover-h: clamp(32rem, calc(100vh - 9rem), 52rem);    /* hauteur de la photo */
+    --cover-w: calc(var(--cover-h) * 0.75);                 /* photo 3:4 */
+    --overlap: 9rem;                                        /* partie du cartouche posée sur la photo */
+    display: grid; max-width: var(--page-max); margin-inline: auto; padding-inline: var(--gutter);
+    grid-template-columns: [full-start] minmax(0, 1fr) [img-start] calc(var(--cover-w) - var(--overlap)) [head-start] var(--overlap) [img-end] minmax(0, 1fr) [full-end];
+  }
+  .page:has(> .cover-portrait) > .cover-portrait {
+    grid-column: img-start / img-end; grid-row: 1; align-self: start; margin: var(--space-s) 0 2.6rem; padding: 0;
+  }
+  .page:has(> .cover-portrait) > .cover-portrait img { block-size: var(--cover-h); inline-size: 100%; max-height: none; object-fit: cover; }
+  .page:has(> .cover-portrait) > .page-header {
+    grid-column: head-start / full-end; grid-row: 1; align-self: end; z-index: 2;
+    max-inline-size: 30rem; margin: 0 0 5rem; padding: var(--space-m); background: var(--color-paper);
+  }
+  .page:has(> .cover-portrait) > .page-header h1 { font-size: clamp(2.4rem, 3.6vw, 3.8rem); }
+  .page:has(> .cover-portrait) > .page-body { grid-column: full-start / full-end; grid-row: 2; padding-inline: 0; }
 }
 figcaption { color: var(--color-muted); }
 
